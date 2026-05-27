@@ -2,81 +2,97 @@
 <html lang="ht">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Bank Ayiti</title>
+    <title>E-Bank Pro - Ayiti</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #2c3e50; text-align: center; }
-        .user-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; display: flex; align-items: center; }
-        .user-card img { width: 50px; height: 50px; border-radius: 50%; margin-right: 15px; }
-        .balance { font-weight: bold; color: green; }
-        .actions { margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px; }
-        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-        button { background: #3498db; color: white; border: none; cursor: pointer; }
-        button:hover { background: #2980b9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .card { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a73e8; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .hidden { display: none; }
+        .balance-box { background: #1a73e8; color: white; padding: 20px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
+        .user-info { margin-bottom: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>E-Bank Digital</h1>
+<div id="login-section" class="card">
+    <h2>Konekte nan Kont ou</h2>
+    <input type="text" id="accNumber" placeholder="Nimewo Kont (8 chif)">
+    <input type="password" id="accPass" placeholder="Modpas (4 chif)">
+    <button onclick="login()">Konekte</button>
+</div>
+
+<div id="dashboard" class="card hidden">
+    <h2>E-Bank Dashboard</h2>
+    <div class="user-info" id="user-display"></div>
+    <div class="balance-box">
+        <p>Balans ou</p>
+        <h1 id="balance-display">100 Goud</h1>
+    </div>
     
-    <div id="users-list">
-        <h2>Lis Kliyan yo</h2>
-        <script>
-            const users = [
-                {id: 1, name: "Mwen (Itilizatè)", balance: 100, pass: "12345678", img: "https://via.placeholder.com/50"},
-                {id: 2, name: "Jean Pierre", balance: 100, pass: "1111", img: "https://via.placeholder.com/50"},
-                {id: 3, name: "Marie Noel", balance: 100, pass: "2222", img: "https://via.placeholder.com/50"},
-                {id: 4, name: "Paul Saint", balance: 100, pass: "3333", img: "https://via.placeholder.com/50"},
-                {id: 5, name: "Lucia Bel", balance: 100, pass: "4444", img: "https://via.placeholder.com/50"},
-                {id: 6, name: "Marc Louis", balance: 100, pass: "5555", img: "https://via.placeholder.com/50"},
-                {id: 7, name: "Rose Anna", balance: 100, pass: "6666", img: "https://via.placeholder.com/50"},
-                {id: 8, name: "Pierre J", balance: 100, pass: "7777", img: "https://via.placeholder.com/50"},
-                {id: 9, name: "Katia M", balance: 100, pass: "8888", img: "https://via.placeholder.com/50"},
-                {id: 10, name: "Dony B", balance: 100, pass: "9999", img: "https://via.placeholder.com/50"}
-            ];
-
-            users.forEach(u => {
-                document.write(`<div class="user-card">
-                    <img src="${u.img}" alt="foto">
-                    <div>
-                        <strong>${u.name}</strong><br>
-                        Balans: <span class="balance">${u.balance} Goud</span>
-                    </div>
-                </div>`);
-            });
-        </script>
-    </div>
-
-    <div class="actions">
-        <h2>Fè yon tranzaksyon</h2>
-        <input type="text" id="loginPass" placeholder="Antre modpas ou (12345678)">
-        <input type="text" id="recipient" placeholder="Non moun k ap resevwa lajan an">
-        <input type="number" id="amount" placeholder="Kantite Goud">
-        <button onclick="transfer()">Voye Lajan</button>
-    </div>
-
-    <div id="receipt" style="margin-top: 20px; padding: 10px; background: #e8f6f3; display:none;">
-        <h3>Detay Resi</h3>
-        <p id="receipt-msg"></p>
-    </div>
+    <hr>
+    <h3>Voye Lajan</h3>
+    <input type="text" id="targetAcc" placeholder="Nimewo kont destinatè (8 chif)">
+    <input type="number" id="transferAmount" placeholder="Montan">
+    <button onclick="transfer()" style="background: #27ae60;">Voye</button>
+    <button onclick="logout()" style="background: #e74c3c; margin-top:10px;">Dekonekte</button>
 </div>
 
 <script>
-    function transfer() {
-        let pass = document.getElementById('loginPass').value;
-        let amount = document.getElementById('amount').value;
-        let recipient = document.getElementById('recipient').value;
+    // Lis 10 moun yo (Nimewo 8 chif, Modpas 4 chif)
+    let users = JSON.parse(localStorage.getItem('users')) || [
+        { id: "12345678", name: "Mwen (Itilizatè)", pass: "1234", balance: 100 },
+        { id: "11112222", name: "Jean Pierre", pass: "1111", balance: 100 },
+        { id: "22223333", name: "Marie Noel", pass: "2222", balance: 100 },
+        { id: "33334444", name: "Paul Saint", pass: "3333", balance: 100 },
+        { id: "44445555", name: "Lucia Bel", pass: "4444", balance: 100 },
+        { id: "55556666", name: "Marc Louis", pass: "5555", balance: 100 },
+        { id: "66667777", name: "Rose Anna", pass: "6666", balance: 100 },
+        { id: "77778888", name: "Pierre J", pass: "7777", balance: 100 },
+        { id: "88889999", name: "Katia M", pass: "8888", balance: 100 },
+        { id: "99990000", name: "Dony B", pass: "9999", balance: 100 }
+    ];
 
-        if (pass === "12345678") {
-            document.getElementById('receipt').style.display = 'block';
-            document.getElementById('receipt-msg').innerText = 
-                `Siksè! Ou voye ${amount} Goud bay ${recipient}.`;
+    let currentUser = null;
+
+    function login() {
+        let id = document.getElementById('accNumber').value;
+        let pass = document.getElementById('accPass').value;
+        currentUser = users.find(u => u.id === id && u.pass === pass);
+        
+        if (currentUser) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            updateUI();
         } else {
-            alert("Modpas pa kòrèk!");
+            alert("Nimewo kont oswa modpas pa kòrèk!");
         }
+    }
+
+    function updateUI() {
+        document.getElementById('user-display').innerText = "Bonjou, " + currentUser.name;
+        document.getElementById('balance-display').innerText = currentUser.balance + " Goud";
+    }
+
+    function transfer() {
+        let targetId = document.getElementById('targetAcc').value;
+        let amount = parseInt(document.getElementById('transferAmount').value);
+        let targetUser = users.find(u => u.id === targetId);
+
+        if (targetUser && amount <= currentUser.balance && amount > 0) {
+            currentUser.balance -= amount;
+            targetUser.balance += amount;
+            localStorage.setItem('users', JSON.stringify(users));
+            updateUI();
+            alert("Transfè fèt avèk siksè!");
+        } else {
+            alert("Erè: Tcheke balans ou oswa nimewo kont lan.");
+        }
+    }
+
+    function logout() {
+        location.reload();
     }
 </script>
 
