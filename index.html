@@ -1,484 +1,83 @@
 <!DOCTYPE html>
 <html lang="ht">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Diksyonè Kreyòl ↔ Español PRO</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#0f172a;
-color:white;
-padding:20px;
-}
-
-h1{
-text-align:center;
-margin-bottom:20px;
-font-size:32px;
-color:#00ffff;
-text-shadow:0 0 10px cyan;
-}
-
-.search-box{
-width:100%;
-max-width:700px;
-margin:auto;
-margin-bottom:20px;
-}
-
-.search-box input{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-outline:none;
-font-size:18px;
-background:#111827;
-color:white;
-box-shadow:0 0 10px #00ffff55;
-}
-
-.dictionary{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-margin-top:20px;
-}
-
-.words-list,
-.learned-list{
-background:#111827;
-border-radius:20px;
-padding:15px;
-height:70vh;
-overflow-y:auto;
-box-shadow:0 0 20px #00ffff22;
-}
-
-.word{
-padding:12px;
-margin-bottom:10px;
-background:#1e293b;
-border-radius:12px;
-cursor:pointer;
-transition:0.3s;
-font-size:18px;
-}
-
-.word:hover{
-background:#00ffff;
-color:black;
-transform:scale(1.03);
-}
-
-.definition{
-background:#111827;
-border-radius:20px;
-padding:20px;
-box-shadow:0 0 20px #00ffff22;
-}
-
-.definition h2{
-color:#00ffff;
-margin-bottom:15px;
-}
-
-.definition p{
-font-size:20px;
-line-height:1.7;
-}
-
-.meaning-box{
-margin-top:20px;
-padding:15px;
-background:#1e293b;
-border-radius:15px;
-}
-
-button{
-padding:12px 18px;
-margin-top:10px;
-margin-right:10px;
-border:none;
-border-radius:12px;
-cursor:pointer;
-font-size:16px;
-font-weight:bold;
-transition:0.3s;
-}
-
-.speak-btn{
-background:#00ffff;
-color:black;
-}
-
-.save-btn{
-background:#22c55e;
-color:white;
-}
-
-.delete-btn{
-background:#ef4444;
-color:white;
-}
-
-.section-title{
-margin-bottom:15px;
-color:#00ffff;
-font-size:22px;
-}
-
-.empty{
-opacity:0.7;
-text-align:center;
-margin-top:20px;
-}
-
-@media(max-width:900px){
-
-.dictionary{
-grid-template-columns:1fr;
-}
-
-.words-list,
-.learned-list{
-height:300px;
-}
-
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Bank Ayiti</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #2c3e50; text-align: center; }
+        .user-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; display: flex; align-items: center; }
+        .user-card img { width: 50px; height: 50px; border-radius: 50%; margin-right: 15px; }
+        .balance { font-weight: bold; color: green; }
+        .actions { margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px; }
+        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        button { background: #3498db; color: white; border: none; cursor: pointer; }
+        button:hover { background: #2980b9; }
+    </style>
 </head>
 <body>
 
-<h1>📘 Diksyonè Kreyòl → Español PRO</h1>
+<div class="container">
+    <h1>E-Bank Digital</h1>
+    
+    <div id="users-list">
+        <h2>Lis Kliyan yo</h2>
+        <script>
+            const users = [
+                {id: 1, name: "Mwen (Itilizatè)", balance: 100, pass: "12345678", img: "https://via.placeholder.com/50"},
+                {id: 2, name: "Jean Pierre", balance: 100, pass: "1111", img: "https://via.placeholder.com/50"},
+                {id: 3, name: "Marie Noel", balance: 100, pass: "2222", img: "https://via.placeholder.com/50"},
+                {id: 4, name: "Paul Saint", balance: 100, pass: "3333", img: "https://via.placeholder.com/50"},
+                {id: 5, name: "Lucia Bel", balance: 100, pass: "4444", img: "https://via.placeholder.com/50"},
+                {id: 6, name: "Marc Louis", balance: 100, pass: "5555", img: "https://via.placeholder.com/50"},
+                {id: 7, name: "Rose Anna", balance: 100, pass: "6666", img: "https://via.placeholder.com/50"},
+                {id: 8, name: "Pierre J", balance: 100, pass: "7777", img: "https://via.placeholder.com/50"},
+                {id: 9, name: "Katia M", balance: 100, pass: "8888", img: "https://via.placeholder.com/50"},
+                {id: 10, name: "Dony B", balance: 100, pass: "9999", img: "https://via.placeholder.com/50"}
+            ];
 
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="Chèche yon mo...">
-</div>
+            users.forEach(u => {
+                document.write(`<div class="user-card">
+                    <img src="${u.img}" alt="foto">
+                    <div>
+                        <strong>${u.name}</strong><br>
+                        Balans: <span class="balance">${u.balance} Goud</span>
+                    </div>
+                </div>`);
+            });
+        </script>
+    </div>
 
-<div class="dictionary">
+    <div class="actions">
+        <h2>Fè yon tranzaksyon</h2>
+        <input type="text" id="loginPass" placeholder="Antre modpas ou (12345678)">
+        <input type="text" id="recipient" placeholder="Non moun k ap resevwa lajan an">
+        <input type="number" id="amount" placeholder="Kantite Goud">
+        <button onclick="transfer()">Voye Lajan</button>
+    </div>
 
-<!-- MO YO -->
-<div class="words-list">
-
-<h2 class="section-title">📚 Tout Mo</h2>
-
-<div id="wordsList"></div>
-
-</div>
-
-<!-- DEFINISYON -->
-<div class="definition">
-
-<h2>📖 Definisyon</h2>
-
-<div class="meaning-box">
-
-<p id="meaning">
-Klike sou yon mo pou wè tradiksyon ak definisyon li.
-</p>
-
-<div id="buttons"></div>
-
-</div>
-
-</div>
-
-<!-- MO APRENN -->
-<div class="learned-list">
-
-<h2 class="section-title">⭐ Mo Mwen Aprann</h2>
-
-<div id="savedWords"></div>
-
-</div>
-
+    <div id="receipt" style="margin-top: 20px; padding: 10px; background: #e8f6f3; display:none;">
+        <h3>Detay Resi</h3>
+        <p id="receipt-msg"></p>
+    </div>
 </div>
 
 <script>
-
-const dictionary = [
-
-{
-kreyol:"Bonjou",
-espanol:"Hola",
-definition:"Yo itilize mo sa pou salye yon moun nan maten oswa lajounen."
-},
-
-{
-kreyol:"Mèsi",
-espanol:"Gracias",
-definition:"Mo pou remèsye yon moun."
-},
-
-{
-kreyol:"Dlo",
-espanol:"Agua",
-definition:"Likid moun bwè pou viv."
-},
-
-{
-kreyol:"Manje",
-espanol:"Comida",
-definition:"Tout bagay moun manje."
-},
-
-{
-kreyol:"Kay",
-espanol:"Casa",
-definition:"Kote yon moun rete."
-},
-
-{
-kreyol:"Lekòl",
-espanol:"Escuela",
-definition:"Kote elèv aprann."
-},
-
-{
-kreyol:"Lanmou",
-espanol:"Amor",
-definition:"Santiman afeksyon pou yon moun."
-},
-
-{
-kreyol:"Travay",
-espanol:"Trabajo",
-definition:"Aktivite moun fè pou touche lajan."
-},
-
-{
-kreyol:"Papa",
-espanol:"Padre",
-definition:"Pè yon timoun."
-},
-
-{
-kreyol:"Manman",
-espanol:"Madre",
-definition:"Mè yon timoun."
-},
-
-{
-kreyol:"Zanmi",
-espanol:"Amigo",
-definition:"Yon moun ou gen bon relasyon avè l."
-},
-
-{
-kreyol:"Dòmi",
-espanol:"Dormir",
-definition:"Repo kò ak lespri."
-},
-
-{
-kreyol:"Pale",
-espanol:"Hablar",
-definition:"Kominike ak bouch."
-},
-
-{
-kreyol:"Machin",
-espanol:"Coche",
-definition:"Veyikil pou deplase."
-},
-
-{
-kreyol:"Lajan",
-espanol:"Dinero",
-definition:"Sa moun itilize pou achte bagay."
-}
-
-];
-
-const wordsList = document.getElementById("wordsList");
-const meaning = document.getElementById("meaning");
-const buttons = document.getElementById("buttons");
-const searchInput = document.getElementById("searchInput");
-const savedWordsDiv = document.getElementById("savedWords");
-
-let savedWords = JSON.parse(localStorage.getItem("savedWords")) || [];
-
-function displayWords(words){
-
-wordsList.innerHTML="";
-
-words.forEach(word=>{
-
-const div=document.createElement("div");
-
-div.className="word";
-
-div.innerHTML=`${word.kreyol}`;
-
-div.onclick=()=>{
-
-showMeaning(word);
-
-};
-
-wordsList.appendChild(div);
-
-});
-
-}
-
-function showMeaning(word){
-
-meaning.innerHTML=`
-
-<b>🇭🇹 Kreyòl:</b> ${word.kreyol}<br><br>
-
-<b>🇪🇸 Español:</b> ${word.espanol}<br><br>
-
-<b>📘 Definisyon:</b><br>
-${word.definition}
-
-`;
-
-buttons.innerHTML=`
-
-<button class="speak-btn" onclick="speakWord('${word.espanol}')">
-🔊 Tande Son
-</button>
-
-<button class="save-btn" onclick='saveWord(${JSON.stringify(word)})'>
-⭐ Save Mo
-</button>
-
-`;
-
-}
-
-function speakWord(text){
-
-if('speechSynthesis' in window){
-
-const speech = new SpeechSynthesisUtterance(text);
-
-speech.lang = "es-ES";
-
-speech.rate = 0.9;
-
-window.speechSynthesis.speak(speech);
-
-}else{
-
-alert("Telefòn ou pa sipòte son.");
-
-}
-
-}
-
-function saveWord(word){
-
-const exists = savedWords.find(w=>w.kreyol===word.kreyol);
-
-if(!exists){
-
-savedWords.push(word);
-
-localStorage.setItem("savedWords", JSON.stringify(savedWords));
-
-displaySavedWords();
-
-alert("Mo a save!");
-
-}else{
-
-alert("Mo sa deja save.");
-
-}
-
-}
-
-function displaySavedWords(){
-
-savedWordsDiv.innerHTML="";
-
-if(savedWords.length===0){
-
-savedWordsDiv.innerHTML=`
-<p class="empty">
-Pa gen mo save pou kounye a.
-</p>
-`;
-
-return;
-
-}
-
-savedWords.forEach((word,index)=>{
-
-const div=document.createElement("div");
-
-div.className="word";
-
-div.innerHTML=`
-
-<b>${word.kreyol}</b>
-<br>
-🇪🇸 ${word.espanol}
-
-<br><br>
-
-<button class="speak-btn" onclick="speakWord('${word.espanol}')">
-🔊
-</button>
-
-<button class="delete-btn" onclick="deleteWord(${index})">
-🗑
-</button>
-
-`;
-
-savedWordsDiv.appendChild(div);
-
-});
-
-}
-
-function deleteWord(index){
-
-savedWords.splice(index,1);
-
-localStorage.setItem("savedWords", JSON.stringify(savedWords));
-
-displaySavedWords();
-
-}
-
-displayWords(dictionary);
-
-displaySavedWords();
-
-searchInput.addEventListener("keyup",()=>{
-
-const value=searchInput.value.toLowerCase();
-
-const filtered=dictionary.filter(word=>
-
-word.kreyol.toLowerCase().includes(value) ||
-
-word.espanol.toLowerCase().includes(value)
-
-);
-
-displayWords(filtered);
-
-});
-
+    function transfer() {
+        let pass = document.getElementById('loginPass').value;
+        let amount = document.getElementById('amount').value;
+        let recipient = document.getElementById('recipient').value;
+
+        if (pass === "12345678") {
+            document.getElementById('receipt').style.display = 'block';
+            document.getElementById('receipt-msg').innerText = 
+                `Siksè! Ou voye ${amount} Goud bay ${recipient}.`;
+        } else {
+            alert("Modpas pa kòrèk!");
+        }
+    }
 </script>
 
 </body>
